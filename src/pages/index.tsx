@@ -1,6 +1,11 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable no-console */
 /* eslint-disable prettier/prettier */
 import { GetStaticProps } from 'next';
+import Link from 'next/link';
+
+import Head from 'next/head';
 
 import Prismic from '@prismicio/client';
 import { getPrismicClient } from '../services/prismic';
@@ -29,11 +34,28 @@ interface HomeProps {
 }
 
 export default function Home({ postsPagination }: HomeProps) {
-  // const { next_page, results } = postsPagination;
+  console.log(postsPagination)
+  const { results } = postsPagination;
   return(
-    <h1>
-      TESTE
-    </h1>
+    <>
+      <Head>
+        <title>Home | My Blog</title>
+      </Head>
+
+      <main>
+      <div className={styles.posts}>
+          { results.map(post => (
+            <Link key={post.uid} href={`/posts/${post.uid}`}>
+              <a >
+                <strong>{post.data.title}</strong>
+                <span>{post.data.subtitle}</span>
+                <time>{post.first_publication_date}</time>
+              </a>
+            </Link>
+          )) }
+        </div>
+      </main>
+    </>
   )
 }
 
@@ -71,10 +93,14 @@ export const getStaticProps: GetStaticProps = async () => {
     }
   })
 
+  const postsPagination = {
+    next_page: postsResponse.next_page,
+    results: posts
+  }
+
   return {
     props: {
-      next_page: postsResponse?.next_page ?? null,
-      results: posts
+      postsPagination
     },
   };
 };
