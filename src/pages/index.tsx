@@ -5,6 +5,8 @@
 import { GetStaticProps } from 'next';
 import Link from 'next/link';
 
+import { FiCalendar, FiUser } from 'react-icons/fi'
+
 import Head from 'next/head';
 
 import Prismic from '@prismicio/client';
@@ -42,18 +44,23 @@ export default function Home({ postsPagination }: HomeProps) {
         <title>Home | My Blog</title>
       </Head>
 
-      <main>
-      <div className={styles.posts}>
-          { results.map(post => (
-            <Link key={post.uid} href={`/posts/${post.uid}`}>
+      <main className={styles.posts}>
+        { results.map(post => (
+          <Link key={post.uid} href={`/posts/${post.uid}`}>
+            <div className={styles.postInfo}>
               <a >
                 <strong>{post.data.title}</strong>
                 <span>{post.data.subtitle}</span>
-                <time>{post.first_publication_date}</time>
+                <div className={styles.timeAndUserInfo}>
+                  <FiCalendar />
+                  <time>{post.first_publication_date}</time>
+                  <FiUser />
+                  <span>{post.data.author}</span>
+                </div>
               </a>
-            </Link>
-          )) }
-        </div>
+            </div>
+          </Link>
+        )) }
       </main>
     </>
   )
@@ -72,7 +79,7 @@ export const getStaticProps: GetStaticProps = async () => {
       'posts.banner',
       'posts.content'
     ],
-    pageSize: 1,
+    pageSize: 20,
   });
 
   console.log(postsResponse);
