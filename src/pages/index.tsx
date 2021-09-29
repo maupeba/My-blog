@@ -10,6 +10,7 @@ import { FiCalendar, FiUser } from 'react-icons/fi'
 import Head from 'next/head';
 
 import Prismic from '@prismicio/client';
+import { useEffect, useState } from 'react';
 import { getPrismicClient } from '../services/prismic';
 
 
@@ -36,8 +37,29 @@ interface HomeProps {
 }
 
 export default function Home({ postsPagination }: HomeProps) {
-  console.log(postsPagination)
-  const { results } = postsPagination;
+  const [posts, setPosts] = useState(postsPagination.results);
+  const [nextPage, setNextPage] = useState(postsPagination.next_page);
+  const [findMorePosts, setFindMorePosts] = useState(false);
+
+  function handleFindMorePosts() {
+    if (nextPage) {
+      try {
+        const requestOptions = {
+          method: 'GET'
+        }
+
+        fetch(nextPage, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          console.log(typeof(result))
+          console.log(result)
+        })
+      } catch (err) {
+        console.log(err.message)
+      }
+    }
+  }
+
   return(
     <>
       <Head>
@@ -45,7 +67,7 @@ export default function Home({ postsPagination }: HomeProps) {
       </Head>
 
       <main className={styles.posts}>
-        { results.map(post => (
+        { posts.map(post => (
           <Link key={post.uid} href={`/posts/${post.uid}`}>
             <div className={styles.postInfo}>
               <a >
@@ -61,6 +83,10 @@ export default function Home({ postsPagination }: HomeProps) {
             </div>
           </Link>
         )) }
+
+        <button onClick={handleFindMorePosts} type="button">
+          Carregar mais posts
+        </button>
       </main>
     </>
   )
@@ -79,10 +105,9 @@ export const getStaticProps: GetStaticProps = async () => {
       'posts.banner',
       'posts.content'
     ],
-    pageSize: 20,
+    pageSize: 1,
   });
 
-  console.log(postsResponse);
 
   const posts = postsResponse.results.map(post => {
     return {
