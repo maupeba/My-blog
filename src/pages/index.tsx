@@ -38,6 +38,7 @@ interface HomeProps {
 
 export default function Home({ postsPagination }: HomeProps) {
   const [posts, setPosts] = useState(postsPagination.results);
+
   const [nextPage, setNextPage] = useState(postsPagination.next_page);
 
   function handleFindMorePosts() {
