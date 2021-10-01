@@ -10,7 +10,7 @@ import { FiCalendar, FiUser } from 'react-icons/fi'
 import Head from 'next/head';
 
 import Prismic from '@prismicio/client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { getPrismicClient } from '../services/prismic';
 
 
@@ -82,7 +82,7 @@ export default function Home({ postsPagination }: HomeProps) {
 
       <main className={styles.posts}>
         { posts.map(post => (
-          <Link key={post.uid} href={`/posts/${post.uid}`}>
+          <Link key={post.uid} href={`/post/${post.uid}`}>
             <div className={styles.postInfo}>
               <a >
                 <strong>{post.data.title}</strong>
@@ -103,7 +103,7 @@ export default function Home({ postsPagination }: HomeProps) {
           Carregar mais posts
         </button>
         ) : (
-          <h1>Sem posts para atualizar no momento :/</h1>
+          null
         )}
       </main>
     </>
