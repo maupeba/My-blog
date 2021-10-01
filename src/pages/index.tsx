@@ -39,7 +39,6 @@ interface HomeProps {
 export default function Home({ postsPagination }: HomeProps) {
   const [posts, setPosts] = useState(postsPagination.results);
   const [nextPage, setNextPage] = useState(postsPagination.next_page);
-  const [findMorePosts, setFindMorePosts] = useState(false);
 
   function handleFindMorePosts() {
     if (nextPage) {
@@ -50,9 +49,24 @@ export default function Home({ postsPagination }: HomeProps) {
 
         fetch(nextPage, requestOptions)
         .then(response => response.json())
-        .then(result => {
-          console.log(typeof(result))
-          console.log(result)
+        .then(response => {
+          const newPosts = response.results.map((post: Post) => {
+            return {
+              uid: post.uid,
+              data: {
+                title: post.data.title,
+                subtitle: post.data.subtitle,
+                author: post.data.author,
+              },
+              first_publication_date: new Date(post.first_publication_date).toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
+              }),
+            }
+          })
+          setPosts([...posts, ...newPosts])
+          setNextPage(response.next_page);
         })
       } catch (err) {
         console.log(err.message)
@@ -84,9 +98,13 @@ export default function Home({ postsPagination }: HomeProps) {
           </Link>
         )) }
 
-        <button onClick={handleFindMorePosts} type="button">
+        { nextPage ? (
+          <button onClick={handleFindMorePosts} type="button">
           Carregar mais posts
         </button>
+        ) : (
+          <h1>Sem posts para atualizar no momento :/</h1>
+        )}
       </main>
     </>
   )
