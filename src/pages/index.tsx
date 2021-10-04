@@ -5,7 +5,7 @@
 import { GetStaticProps } from 'next';
 import Link from 'next/link';
 
-import { FiCalendar, FiUser } from 'react-icons/fi'
+import { FiCalendar, FiUser } from 'react-icons/fi';
 
 import Head from 'next/head';
 
@@ -81,14 +81,14 @@ export default function Home({ postsPagination }: HomeProps) {
         <title>Home | My Blog</title>
       </Head>
 
-      <main className={styles.posts}>
+      <main className={commonStyles.posts}>
         { posts.map(post => (
           <Link key={post.uid} href={`/post/${post.uid}`}>
             <div className={styles.postInfo}>
               <a >
                 <strong>{post.data.title}</strong>
                 <span>{post.data.subtitle}</span>
-                <div className={styles.timeAndUserInfo}>
+                <div className={commonStyles.timeAndUserInfo}>
                   <FiCalendar />
                   <time>{post.first_publication_date}</time>
                   <FiUser />
