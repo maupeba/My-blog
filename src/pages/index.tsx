@@ -6,7 +6,6 @@ import { GetStaticProps } from 'next';
 import Link from 'next/link';
 
 import { FiCalendar, FiUser } from 'react-icons/fi';
-
 import Head from 'next/head';
 
 import Prismic from '@prismicio/client';
