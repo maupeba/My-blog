@@ -55,11 +55,13 @@ export default function Post({ post }: PostProps) {
       <img className={styles.banner} src={post.data.banner.url} alt="Banner" />
       <main className={commonStyles.posts}>
         <h1>{post.data.title}</h1>
-        <div className={commonStyles.timeAndUserInfo}>
-          <FiCalendar />
-          <time>{post.first_publication_date}</time>
-          <FiUser />
-          <span>{post.data.author}</span>
+        <div className={styles.postInfo}>
+          <div className={commonStyles.timeAndUserInfo}>
+            <FiCalendar />
+            <time>{post.first_publication_date}</time>
+            <FiUser />
+            <span>{post.data.author}</span>
+          </div>
         </div>
         { content.map(art => (
           <article>
